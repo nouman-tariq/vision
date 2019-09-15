@@ -29,7 +29,7 @@ for i = 1:numel(imglist)
     [Im] = myEdgeFilter(img, sigma);   
     [H,rhoScale,thetaScale] = myHoughTransform(Im, threshold, rhoRes, thetaRes);
     [rhos, thetas] = myHoughLines(H, nLines);
-    lines = houghlines(Im>threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',10);
+    lines = houghlines(Im>threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',20);
     
     %everything below here just saves the outputs to files%
     fname = sprintf('%s/%s_01edge.png', resultsdir, imgname);

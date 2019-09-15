@@ -6,6 +6,7 @@ function [rhos, thetas] = myHoughLines(H, nLines)
 
     H = (H >= imdilate(H, filter)) .* H;
     
+    
     [~, ind] = maxk(H(:), nLines);
     [rhos, thetas] = ind2sub(size(H), ind);
 end
