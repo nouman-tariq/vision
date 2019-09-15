@@ -17,9 +17,7 @@ function [H, rhoScale, thetaScale] = myHoughTransform(Im, threshold, rhoRes, the
         if exist('H', 'var'); H = H + tH; else H = tH; end
         
     end
-    
-    H = H / max(H(:));
-    
+       
 end
         
         
