@@ -25,7 +25,7 @@ for i = 1:numel(imglist)
     
     img = double(img) / 255;
    
-    %actual Hough line code function calls%  
+    %actual Hough line code function calls%  li
     [Im] = myEdgeFilter(img, sigma);   
     [H,rhoScale,thetaScale] = myHoughTransform(Im, threshold, rhoRes, thetaRes);
     [rhos, thetas] = myHoughLines(H, nLines);
