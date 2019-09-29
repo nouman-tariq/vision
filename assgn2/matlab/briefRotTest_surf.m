@@ -10,7 +10,7 @@ if ndims(cv_cover) == 3
 end
 
 %% Compute the features and descriptors
-c1 = detectFASTFeatures(cv_cover);
+c1 = detectSURFFeatures(cv_cover);
 [f1, vc1] = computeBrief(cv_cover, c1.Location);
 f1 = binaryFeatures(uint8(f1));
 
@@ -19,7 +19,7 @@ for i = 0:36
     rot = imrotate(cv_cover, i*10);
     
     %% Compute features and descriptors
-    c2 = detectFASTFeatures(rot);
+    c2 = detectSURFFeatures(rot);
     [f2, vc2] = computeBrief(rot, c2.Location);
     f2 = binaryFeatures(uint8(f2));
     
@@ -34,7 +34,7 @@ for i = 0:36
     
     %% Save matches
     H = showMatchedFeatures(cv_cover, rot, locs1, locs2, 'montage');
-    saveas(H, sprintf('../results/q2_1_5/fast/rot%d.png', i));
+    saveas(H, sprintf('../results/q2_1_5/surf/rot%d.png', i));
     
 end
 
