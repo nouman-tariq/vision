@@ -1,14 +1,18 @@
 function [ H2to1 ] = computeH( x1, x2 )
 %COMPUTEH Computes the homography between two sets of points
 [N, ~] = size(x1);
-% A = [];
-% for i = 1:N
-%     A(2*i-1:2*i, :) = computeAi(x1(i, :), x2(i, :));
-% end
-A = zeros(2*N, 9);
-A(2*(1:N)-1:2*(1:N), :) = computeAi(x1(1:N, :), x2(1:N, :));
-[~, S, V] = svd(A);
-H2to1 = reshape(V(:, end), [3 3]);
+A = [];
+for i = 1:N
+    A(2*i-1:2*i, :) = computeAi(x1(i, :), x2(i, :));
+end
+% A = zeros(2*N, 9);
+% A(2*(1:N)-1:2*(1:N), :) = computeAi(x1(1:N, :), x2(1:N, :));
+[~, S, V] = svd(A, 'econ');
+disp('A'); disp(A); disp(A(2*(1:N)));
+s = diag(S);
+disp('S'); disp(s); disp(find(s)); disp(size(S)); disp(s(6:end));
+disp('V'); disp(V); disp(size(V));
+H2to1 = reshape(V(:, end), [3 3])';
 end
 
 function [A_i] = computeAi(p1, p2)

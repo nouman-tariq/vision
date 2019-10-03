@@ -19,14 +19,14 @@ e = sum(e_mask)/N;
 n = ceil(log(1-p) / log(1-(1-e)^s));
 
 %% Choose threshold 'd'
-d = sqrt(3.84*mean(var(locs2 - mean(locs2))));
+d = 10; %sqrt(3.84*mean(var(locs2 - mean(locs2))));
 % how to choose?
 
 %% Prepare homogeneous coordinates
 locs2homo = horzcat(locs2, ones(N, 1));
 
 %% Loop
-%%% Randomly sample 'N' correspondences
+%%% Randomly sample 'n' correspondences
 %%% computeH_norm
 %%% project data with 'H', compute norm between matched and projected
 %%% count inliers wrt 'd'

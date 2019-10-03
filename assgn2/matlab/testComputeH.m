@@ -1,32 +1,38 @@
-function testComputeH(i)
-% test the i'th point pair for 'x1_i = H * x2_i' up to a scale
-% with H given by 'computeH_norm'
-x1 = [501 500; 500 700; 600 600; 700 500; 700 700];
-x2 = [500 500; 500 700; 600 600; 700 500; 700 700];
-x1h1 = horzcat(x1(i, :), 1);
-x2h1 = horzcat(x2(i, :), 1);
+function testComputeH()
 
-H2to1 = computeH_norm(x1, x2);
-disp('h * x2');
-x1h1_ = H2to1 * x2h1';
-disp(H2to1 * x2h1');
+x1 = [333 484; 333 334; 709 334; 709 484];
+% x1 = [0 0; 100 0; 100 200; 0 200];
+% x2 = [332 343; 430 229; 712 477; 614 590];
+theta = 45 * pi/180;
+rot = [cos(theta) -sin(theta); sin(theta) cos(theta)];
+rothomo = [cos(theta) -sin(theta) 0; sin(theta) cos(theta) 0; 0 0 1];
+x2 = (rot * x1')';
+disp('x2');
+disp(x2)
+
+x1homo = horzcat(x1, ones(size(x1, 1), 1));
+x2homo = horzcat(x2, ones(size(x1, 1), 1));
+
+H2to1 = computeH(x1, x2);
+disp('H');
+disp(H2to1);
+disp('h * x2homo');
+x1_ = H2to1 * x2homo';
+disp(x1_);
 disp('x1');
-disp(x1h1');
+disp(x1homo');
 disp('compare: test that they should share the same scalar scale');
-disp(x1h1_ ./ x1h1');
-
-% A = [];
-% [N, ~] = size(x1);
-% for i = 1:N
-%     A = vertcat(A, computeAi(x1(i, :), x2(i, :)));
-% end
-% size(A)
-% o = zeros(2*N, 1);
-% h = A \ o;
-% reshape(h, [3 3])
-% x1h1_ = H2to1 * x2h1';
-% disp(x1h1');
-% disp(x1h1_);
-% disp(x1h1' ./ x1h1_);
+scales = x1_ ./ x1homo';
+disp(scales);
+disp('max');
+max_ = max(max(scales));
+disp(max_);
+disp('min');
+min_ = min(min(scales));
+disp(min_);
+disp('diff');
+disp(max_ - min_);
+disp('h_ans/h2to1');
+disp(inv(rothomo) ./ H2to1);
 
 end
