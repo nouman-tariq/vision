@@ -14,12 +14,15 @@ s = 4;       % minimum number of points to fit the model (solve H)
 % itself among all x- and y- coordinates
 e_mask = any(isoutlier(locs2), 2);
 e = sum(e_mask)/N;
+disp('e'); disp(e);
 
 %% Choose sample size 'n'
 n = ceil(log(1-p) / log(1-(1-e)^s));
+disp('n'); disp(n);
 
 %% Choose threshold 'd'
 d = 10; %sqrt(3.84*mean(var(locs2 - mean(locs2))));
+disp('d'); disp(d);
 % how to choose?
 
 %% Prepare homogeneous coordinates
@@ -39,7 +42,7 @@ for i = 1:maxIter
    proj2homo = H * locs2homo';
    proj2 = proj2homo(1:2, :);
    inliers_ = (vecnorm(proj2' - locs1, 2, 2) <= d);
-   %disp(sum(inliers_));
+   disp(sum(inliers_));
    if sum(inliers_) > sum(inliers)
        inliers = inliers_;
        bestH2to1 = H;

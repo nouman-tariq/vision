@@ -7,7 +7,7 @@ rot = [cos(theta) -sin(theta); sin(theta) cos(theta)];
 rothomo = [cos(theta) -sin(theta) 0; sin(theta) cos(theta) 0; 0 0 1];
 x2 = (rot * x1')';
 
-H2to1 = computeH(x1, x2);
+H2to1 = computeH_norm(x1, x2);
 
 disp('H'); disp(H2to1);
 
