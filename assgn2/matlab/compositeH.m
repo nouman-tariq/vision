@@ -5,31 +5,24 @@ function [ composite_img ] = compositeH( H2to1, template, img )
 % Note that the homography we compute is from the image to the template;
 % x_template = H2to1*x_photo
 % For warping the template to the image, we need to invert it.
-H_template_to_img = inv(H2to1);
-
-% size(H2to1)     % erect template to warped cv_cover in img
-% size(template) % hp_cover with cv_cover size
-% size(img)       % destination img with warped cv_cover
+%H_template_to_img = inv(H2to1);
 
 %% Create mask of same size as template
-[Ht, Wt] = size(template);
-mask = zeros(Ht, Wt);
+% Pixels with ones represent the pixels template is located
+mask = ones(size(template));
 
 %% Warp mask by appropriate homography
-% warp mask to warped-in-img
-% as marker
-[Yt, Xt] = meshgrid(1:Ht, 1:Wt);
-coords = [Y(:) X(:) ones(Ht*Wt, 1)];
-mask = (H_template_to_img * coords')';
+% Project mask to img such that only pixels representing the template has
+% logical 1
+mask = logical(warpH(mask, H2to1, size(img)));
 
 %% Warp template by appropriate homography
-% warp hp_cover to warped-in-img
-%wrapH
+% Prepare properly the template that properly warps to img
+warped_template = warpH(template, H2to1, size(img));
 
 %% Use mask to combine the warped template and the image
-% overlay mask onto template
-% apply mask to img
+% Change only the template pixels to the warped template
 composite_img = img;
-composite_img(mask) = template;
+composite_img(mask) = warped_template(mask);
 
 end
