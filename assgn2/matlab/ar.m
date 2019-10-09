@@ -6,7 +6,7 @@ ar_src = loadVid('../data/ar_source.mov');
 in = loadVid('../data/book.mov');
 cv_img = imread('../data/cv_cover.jpg');
 
-out = VideoWriter('output.avi');
+out = VideoWriter('q3_1.avi');
 open(out)
 
 for i = 1:length(ar_src)
@@ -15,7 +15,7 @@ for i = 1:length(ar_src)
     [locs1, locs2] = matchPics(cv_img, in(i).cdata);
 
     %% Compute homography using RANSAC
-    [bestH2to1, ~] = computeH_ransac(locs1, locs2)
+    [bestH2to1, ~] = computeH_ransac(locs1, locs2);
     
     %% Scale harry potter image to template size
     % Why is this is important?

@@ -21,7 +21,7 @@ f2 = binaryFeatures(uint8(f2));
 
 
 %% Match features using the descriptors
-indexPairs = matchFeatures(f1, f2, 'MaxRatio', 0.7);
+indexPairs = matchFeatures(f1, f2, 'MaxRatio', 0.73);
 locs1 = vc1(indexPairs(:,1),:);
 locs2 = vc2(indexPairs(:,2),:);
 
