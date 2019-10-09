@@ -6,7 +6,7 @@ ar_src = loadVid('../data/ar_source.mov');
 in = loadVid('../data/book.mov');
 cv_img = imread('../data/cv_cover.jpg');
 
-out = VideoWriter('q3_1.avi');
+out = VideoWriter('../results/ar.avi');
 open(out)
 
 for i = 1:length(ar_src)
