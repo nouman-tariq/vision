@@ -24,7 +24,7 @@ x2n = (T2*x2')';
 H = computeH(x1n(:, 1:2), x2n(:, 1:2));
 
 %% Denormalization
-H2to1 = inv(T1)*H*T2;
+H2to1 = (T1 \ H)*T2;
 end
 
 function [T] = norm_transform(x)
