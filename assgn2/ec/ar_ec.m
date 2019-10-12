@@ -12,7 +12,7 @@ c1 = detectFASTFeatures(cv_img_sm);
 videoPlayer = vision.VideoPlayer;
 
 tot_time = 0;
-nextROI = [1 1; size(in(1).cdata, 1:2)];
+nextROI = [1 1; size(in(1).cdata, 1) size(in(1).cdata, 2)];
 for i = 1:length(ar_src)
     tic
     %% Extract features and match
@@ -34,7 +34,7 @@ for i = 1:length(ar_src)
     
     %% Calculate composite image
     [img, nextROI] = compositeH_ec(inv(bestH2to1), scaled_ar_img, in(i).cdata);
-    nextROI = [max(nextROI(1,:), 1); min(nextROI(2,:), size(in(i).cdata, 1:2))];
+    nextROI = [max(nextROI(1,:), 1); min(nextROI(2,:), [size(in(1).cdata, 1) size(in(1).cdata, 2)])];
 
     %% Display fps and frame number
     tot_time = tot_time + toc;
