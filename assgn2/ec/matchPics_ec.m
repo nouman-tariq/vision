@@ -1,4 +1,4 @@
-function [ locs1, locs2] = matchPics_ec( f1, vc1, I2 )
+function [locs1, locs2] = matchPics_ec( f1, vc1, I2 )
 %MATCHPICS Extract features, obtain their descriptors, and match them!
 
 %% Convert images to grayscale, if necessary

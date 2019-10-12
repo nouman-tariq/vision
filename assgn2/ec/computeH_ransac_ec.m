@@ -35,6 +35,7 @@ for i = 1:maxIter
    inliers_i = (diffs <= d);
    if sum(inliers_i) > sum(inliers)
        inliers = inliers_i;
+       %bestH2to1 = H;
    end
 end
 
