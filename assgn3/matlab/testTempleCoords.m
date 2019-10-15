@@ -10,6 +10,7 @@ corresp = load('../data/someCorresp.mat');
 
 %% 2. Run eightpoint to compute fundamental matrix
 F = eightpoint(corresp.pts1, corresp.pts2, corresp.M);
+disp('F'); disp(F);
 displayEpipolarF(im1, im2, F);
 
 %% 8. Save computed rotation matrix and translation
