@@ -11,7 +11,18 @@ corresp = load('../data/someCorresp.mat');
 %% 2. Run eightpoint to compute fundamental matrix
 F = eightpoint(corresp.pts1, corresp.pts2, corresp.M);
 disp('F'); disp(F);
+F_ = estimateFundamentalMatrix(corresp.pts1, corresp.pts2, 'Method', 'Norm8Point');
+disp('F_'); disp(F_);
+disp('F ./ F_'); disp(F ./ F_);
 displayEpipolarF(im1, im2, F);
+
+%% 3. Run epipolarCorrespondences on points in img1 to get points in img2
+coords = load('../data/templeCoords.mat');
+% coords.pts2 = epipolarCorrespondence(im1, im2, F, coords.pts1);
+
+
+%% 4. Compute essential matrix
+intrinsics = load('../data/intrinsics.mat');
 
 %% 8. Save computed rotation matrix and translation
 % save extrinsic parameters for dense reconstruction

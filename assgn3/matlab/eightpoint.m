@@ -10,22 +10,15 @@ function F = eightpoint(pts1, pts2, M)
 
 N = size(pts1, 1);
 %% Normalize points
-T1 = norm_transform(pts1);
-T2 = norm_transform(pts2);
+T = [1/M, 0, 0; 0, 1/M, 0; 0, 0, 1];
 % Convert to homogeneous coordinates
-pts1n = [pts1(1:N, :), ones(N, 1)];
-pts2n = [pts2(1:N, :), ones(N, 1)];
-pts1n = (T1 * pts1n')';
-pts2n = (T2 * pts2n')';
+pts1n = [pts1, ones(N, 1)];
+pts2n = [pts2, ones(N, 1)];
 % Scale down by 'M'
-pts1n = pts1n ./ M;
-pts2n = pts2n ./ M;
-% Convert back to non-homogeneous coordinates
-pts1n = pts1n ./ pts1n(3, :);
-pts2n = pts2n ./ pts2n(3, :);
+pts1n = (T * pts1n')';
+pts2n = (T * pts2n')';
 
 %% Construct N-by-9 'A'
-% Truncate to non-homogeneous coordinates
 x1 = pts1n(:, 1);
 y1 = pts1n(:, 2);
 x2 = pts2n(:, 1);
@@ -42,18 +35,11 @@ F = reshape(V_A(:, 9), [3 3]);
 S(end, end) = 0;
 F = U*S*V';
 
+%% Un-normalize 'F'
+% Scale up by 'M'
+F = T' * F * T;
+
 %% Refine solution with local minimization
 F = refineF(F, pts1, pts2);
 
-%% Un-normalize 'F'
-% scale back up to 'M'
-F = F .* M;
-F = T2' * F * T1;
-end
-
-function T = norm_transform(x)
-centroid = [mean(x(:, 1)) mean(x(:, 2))];
-scale = sqrt(2) / mean(vecnorm(x, 2, 2));
-T = diag([scale scale 1]);
-T(1:2, 3) = -scale * centroid;
 end
