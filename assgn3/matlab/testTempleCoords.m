@@ -11,9 +11,9 @@ corresp = load('../data/someCorresp.mat');
 %% 2. Run eightpoint to compute fundamental matrix
 F = eightpoint(corresp.pts1, corresp.pts2, corresp.M);
 % disp('F'); disp(F);
-% F_ = estimateFundamentalMatrix(corresp.pts1, corresp.pts2, 'Method', 'Norm8Point');
+F_ = estimateFundamentalMatrix(corresp.pts1, corresp.pts2, 'Method', 'Norm8Point');
 % disp('F_'); disp(F_);
-% disp('F ./ F_'); disp(F ./ F_);
+disp('F ./ F_'); disp(F ./ F_);
 % displayEpipolarF(im1, im2, F);
 
 %% 3. Run epipolarCorrespondences on points in img1 to get points in img2
@@ -24,7 +24,13 @@ coords.pts2 = epipolarCorrespondence(im1, im2, F, coords.pts1);
 %% 4. Load intrisincs.mat and compute essential matrix
 intrinsics = load('../data/intrinsics.mat');
 E = essentialMatrix(F, intrinsics.K1, intrinsics.K2);
+E_ = estimateEssentialMatrix(coords.pts1, coords.pts2,...
+    cameraParameters('IntrinsicMatrix', intrinsics.K1'),...
+    cameraParameters('IntrinsicMatrix', intrinsics.K2'));
 disp('E'); disp(E);
+disp('E ./ E_'); disp(E ./ E_);
+%%% DEBUG
+% E = E_;
 
 %% 5. Compute camera projection matrices P1, and P2 by camera2
 extrinsic1 = [eye(3), zeros(3, 1)];
@@ -40,11 +46,11 @@ end
 [P2, pts3d] = findExtrinsic2(P1, P2s, coords.pts1, coords.pts2);
 
 % Re-projection error using someCorresp
-repj_error = reprojectTriangulated(P1, P2s, coords.pts1, coords.pts2);
+[repj_error] = reprojectTriangulated(P1, P2, coords.pts1, coords.pts2, pts3d);
 disp('repj_error'); disp(repj_error);
 
 %% 7. Plot 3D point correspondences using plot3
-plot3(pts3d(:, 1), pts3d(:, 3), pts3d(:, 2), '.');
+plot3(pts3d(:, 1), pts3d(:, 3), -pts3d(:, 2), '.');
 
 %% 8. Save computed rotation matrix and translation
 R1 = P1(:, 1:3);
@@ -60,24 +66,22 @@ pts3ds = zeros([size(pts1, 1), 3, 4]);
 numPointsWithPosDepth = zeros(4, 1);
 for i = 1:4
     pts3ds(:, :, i) = triangulate(P1, pts1, P2s(:, :, i), pts2);
-    % which most of the 3D points are in front of both cameras (positive
-    % depth)? How
     numPointsWithPosDepth(i) = sum(pts3ds(:, 3, i) > 0);
 end
-[~, idxExtrinsic2] = max(numPointsWithPosDepth);
-P2 = P2s(:, :, idxExtrinsic2);
-pts3d = pts3ds(:, :, idxExtrinsic2);
+disp('numPointsWithPosDepth'); disp(numPointsWithPosDepth);
+[~, correct] = max(numPointsWithPosDepth);
+disp('correct'); disp(correct);
+%%% DEBUG: adjust which of the 4 camera 2 project matrices to use by 'correct'
+P2 = P2s(:, :, correct);
+pts3d = pts3ds(:, :, correct);
 end
 
 %% Compute reprojection error of triangulate
-function [err] = reprojectTriangulated(P1, P2s, pts1, pts2)
-[P2, pts3d] = findExtrinsic2(P1, P2s, pts1, pts2);
-
+function [err] = reprojectTriangulated(P1, P2, pts1, pts2, pts3d)
 N = size(pts3d, 1);
-pts1_proj = (P1 * [pts3d ones(N,1)]')';
+pts1_proj = [pts3d, ones(N,1)] * P1';
 pts1_proj = pts1_proj(:,1:2) ./ pts1_proj(:,3);
-pts2_proj = (P2 * [pts3d ones(N,1)]')';
+pts2_proj = [pts3d, ones(N,1)] * P2';
 pts2_proj = pts2_proj(:,1:2) ./ pts2_proj(:,3);
-
-err = (sum(vecnorm(pts1_proj - pts1, 2, 2)) + sum(vecnorm(pts2_proj - pts2, 2, 2))) ./ 2*N;
+err = (mean(vecnorm(pts1_proj - pts1, 2, 2)) + mean(vecnorm(pts2_proj - pts2, 2, 2))) / 2;
 end
