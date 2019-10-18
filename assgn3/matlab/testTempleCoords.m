@@ -83,5 +83,5 @@ pts1_proj = [pts3d, ones(N,1)] * P1';
 pts1_proj = pts1_proj(:,1:2) ./ pts1_proj(:,3);
 pts2_proj = [pts3d, ones(N,1)] * P2';
 pts2_proj = pts2_proj(:,1:2) ./ pts2_proj(:,3);
-err = (mean(vecnorm(pts1_proj - pts1, 2, 2)) + mean(vecnorm(pts2_proj - pts2, 2, 2))) / 2;
+err = mean(vecnorm(pts1_proj - pts1, 2, 2)) + mean(vecnorm(pts2_proj - pts2, 2, 2));
 end
