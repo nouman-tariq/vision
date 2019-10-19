@@ -1,4 +1,5 @@
 clear all ;
+addpath('../ec');
 % Load image and paramters
 im1 = imread('../data/im1.png');
 im2 = imread('../data/im2.png');

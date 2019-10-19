@@ -30,7 +30,7 @@ E_ = estimateEssentialMatrix(coords.pts1, coords.pts2,...
 disp('E'); disp(E);
 disp('E ./ E_'); disp(E ./ E_);
 %%% DEBUG
-% E = E_;
+E = E_;
 
 %% 5. Compute camera projection matrices P1, and P2 by camera2
 extrinsic1 = [eye(3), zeros(3, 1)];
@@ -43,7 +43,7 @@ for i = 1:4
 end
 
 %% 6. Run triangulate on the 4 candidates
-[P2, pts3d] = findExtrinsic2(P1, P2s, coords.pts1, coords.pts2);
+[P2, pts3d, correct_idx] = findExtrinsic2(P1, P2s, coords.pts1, coords.pts2);
 
 % Re-projection error using someCorresp
 [repj_error] = reprojectTriangulated(P1, P2, coords.pts1, coords.pts2, pts3d);
@@ -53,15 +53,15 @@ disp('repj_error'); disp(repj_error);
 plot3(pts3d(:, 1), pts3d(:, 3), -pts3d(:, 2), '.');
 
 %% 8. Save computed rotation matrix and translation
-R1 = P1(:, 1:3);
-t1 = P1(:, 4);
-R2 = P2(:, 1:3);
-t2 = P2(:, 4);
+R1 = extrinsic1(:, 1:3);
+t1 = extrinsic1(:, 4);
+R2 = extrinsic2s(:, 1:3, correct_idx);
+t2 = extrinsic2s(:, 4, correct_idx);
 % save extrinsic parameters for dense reconstruction
 save('../data/extrinsics.mat', 'R1', 't1', 'R2', 't2');
 
 %% Find the correct P2 and 3D points from 4 candidate extrinsics
-function [P2, pts3d] = findExtrinsic2(P1, P2s, pts1, pts2)
+function [P2, pts3d, correct] = findExtrinsic2(P1, P2s, pts1, pts2)
 pts3ds = zeros([size(pts1, 1), 3, 4]);
 numPointsWithPosDepth = zeros(4, 1);
 for i = 1:4
