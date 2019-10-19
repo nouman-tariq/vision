@@ -11,7 +11,7 @@ c = c(1:3) ./ c(end);
 [K, R] = rq(P(:, 1:3));
 
 %% t
-t = R*c;
+t = -R*c;
 
 end
 
@@ -21,4 +21,11 @@ A = perm*A;
 [Q, R] = qr(A');
 Q = perm*Q';
 R = perm*R'*perm;
+neg = -any(R<0 & abs(R) > 1e-4);
+neg(neg==0) = 1;
+R = R * diag(neg);
+Q = diag(neg) * Q;
+if abs(det(Q)+1) < 1e-4
+    Q = - Q;
+end
 end
