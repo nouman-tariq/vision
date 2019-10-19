@@ -4,12 +4,12 @@ function dispM = get_disparity(im1, im2, maxDisp, windowSize)
 dispM = zeros(size(im1)) + maxDisp;
 disp_min = zeros(size(im1)) + inf;
 
-im1 = im1 ./ 255;
-im2 = im2 ./ 255;
+im1 = double(im1);
+im2 = double(im2);
 
 for d = 0:maxDisp
    im2d = imtranslate(im2, [d 0], 'FillValues', inf); 
-   disp = conv2(im1.*im1 - 2.*im1.*im2d + im2d.*im2d, ones(windowSize, windowSize), 'same');
+   disp = conv2((im1-im2d).^2, ones(windowSize, windowSize), 'same');
    %dispM = min(dispM, disp);
    dispM(disp<disp_min) = d;
    disp_min = min(disp_min, disp);
