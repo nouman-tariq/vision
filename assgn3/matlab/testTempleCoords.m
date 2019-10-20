@@ -30,7 +30,7 @@ E_ = estimateEssentialMatrix(coords.pts1, coords.pts2,...
 disp('E'); disp(E);
 disp('E ./ E_'); disp(E ./ E_);
 %%% DEBUG
-E = E_;
+% E = E_;
 
 %% 5. Compute camera projection matrices P1, and P2 by camera2
 extrinsic1 = [eye(3), zeros(3, 1)];

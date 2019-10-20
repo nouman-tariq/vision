@@ -13,8 +13,8 @@ x_est = x_est(1:2, :) ./ x_est(end);
 
 %% 4. Plot x and x_est
 figure; imshow(image); hold on; 
-plot(x(1,:), x(2,:), 'bo', 'LineWidth', 1, 'MarkerSize', 15);
-plot(x_est(1, :), x_est(2, :), 'r.', 'LineWidth', 2, 'MarkerSize', 15);
+plot(x(1,:), x(2,:), 'go', 'LineWidth', 1, 'MarkerSize', 15);
+plot(x_est(1, :), x_est(2, :), 'k.', 'LineWidth', 2, 'MarkerSize', 15);
 
 %% 5. Rotate cad by R
 cad_r = cad;
@@ -28,4 +28,4 @@ cad_p = (P*cad_p')';
 cad_p = cad_p(:, 1:2) ./ cad_p(end);
 figure; 
 ax = axes;
-imshow(image); hold on; patch(ax, 'Faces', cad_r.faces, 'Vertices', cad_p, 'FaceColor', 'blue', 'FaceAlpha', .3, 'EdgeColor', 'none'); hold on;
+imshow(image); hold on; patch(ax, 'Faces', cad_r.faces, 'Vertices', cad_p, 'FaceColor', 'red', 'FaceAlpha', .3, 'EdgeColor', 'none'); hold on;
