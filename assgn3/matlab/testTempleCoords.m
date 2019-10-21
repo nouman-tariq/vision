@@ -46,8 +46,9 @@ end
 [P2, pts3d, correct_idx] = findExtrinsic2(P1, P2s, coords.pts1, coords.pts2);
 
 % Re-projection error using someCorresp
-[repj_error] = reprojectTriangulated(P1, P2, coords.pts1, coords.pts2, pts3d);
-disp('repj_error'); disp(repj_error);
+[err1, err2] = reprojectTriangulated(P1, P2, coords.pts1, coords.pts2, pts3d);
+disp('repj_error of pts1'); disp(err1);
+disp('repj_error of pts2'); disp(err2);
 
 %% 7. Plot 3D point correspondences using plot3
 plot3(pts3d(:, 1), pts3d(:, 3), -pts3d(:, 2), '.');
@@ -71,17 +72,17 @@ end
 disp('numPointsWithPosDepth'); disp(numPointsWithPosDepth);
 [~, correct] = max(numPointsWithPosDepth);
 disp('correct'); disp(correct);
-%%% DEBUG: adjust which of the 4 camera 2 project matrices to use by 'correct'
 P2 = P2s(:, :, correct);
 pts3d = pts3ds(:, :, correct);
 end
 
 %% Compute reprojection error of triangulate
-function [err] = reprojectTriangulated(P1, P2, pts1, pts2, pts3d)
+function [err1, err2] = reprojectTriangulated(P1, P2, pts1, pts2, pts3d)
 N = size(pts3d, 1);
 pts1_proj = [pts3d, ones(N,1)] * P1';
 pts1_proj = pts1_proj(:,1:2) ./ pts1_proj(:,3);
 pts2_proj = [pts3d, ones(N,1)] * P2';
 pts2_proj = pts2_proj(:,1:2) ./ pts2_proj(:,3);
-err = mean(vecnorm(pts1_proj - pts1, 2, 2)) + mean(vecnorm(pts2_proj - pts2, 2, 2));
+err1 = mean(vecnorm(pts1_proj - pts1, 2, 2));
+err2 = mean(vecnorm(pts2_proj - pts2, 2, 2));
 end
