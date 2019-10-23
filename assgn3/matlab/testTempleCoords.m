@@ -79,9 +79,9 @@ end
 %% Compute reprojection error of triangulate
 function [err1, err2] = reprojectTriangulated(P1, P2, pts1, pts2, pts3d)
 N = size(pts3d, 1);
-pts1_proj = [pts3d, ones(N,1)] * P1';
+pts1_proj = P1 * [pts3d, ones(N,1)];
 pts1_proj = pts1_proj(:,1:2) ./ pts1_proj(:,3);
-pts2_proj = [pts3d, ones(N,1)] * P2';
+pts2_proj = P2 * [pts3d, ones(N,1)];
 pts2_proj = pts2_proj(:,1:2) ./ pts2_proj(:,3);
 err1 = mean(vecnorm(pts1_proj - pts1, 2, 2));
 err2 = mean(vecnorm(pts2_proj - pts2, 2, 2));

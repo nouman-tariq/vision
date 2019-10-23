@@ -9,7 +9,7 @@ P = estimate_pose(x, X);
 X_homo = X;
 X_homo(end+1, :) = 1;
 x_est = P*X_homo;
-x_est = x_est(1:2, :) ./ x_est(end);
+x_est = x_est(1:2, :) ./ x_est(end, :);
 
 %% 4. Plot x and x_est
 figure; imshow(image); hold on; 
@@ -25,7 +25,7 @@ figure; trimesh(cad_r.faces, cad_r.vertices(:,1), cad_r.vertices(:,2), cad_r.ver
 cad_p = cad.vertices;
 cad_p(:, end+1) = 1;
 cad_p = (P*cad_p')';
-cad_p = cad_p(:, 1:2) ./ cad_p(end);
+cad_p = cad_p(:, 1:2) ./ cad_p(:, end);
 figure; 
 ax = axes;
 imshow(image); hold on; patch(ax, 'Faces', cad_r.faces, 'Vertices', cad_p, 'FaceColor', 'red', 'FaceAlpha', .3, 'EdgeColor', 'none'); hold on;
