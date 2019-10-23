@@ -35,11 +35,11 @@ F = reshape(V_A(:, 9), [3 3]);
 S(end, end) = 0;
 F = U*S*V';
 
+%% Refine solution with local minimization
+F = refineF(F, pts1n(:, 1:2), pts2n(:, 1:2));
+
 %% Un-normalize 'F'
 % Scale up by 'M'
 F = T' * F * T;
-
-%% Refine solution with local minimization
-F = refineF(F, pts1, pts2);
 
 end
