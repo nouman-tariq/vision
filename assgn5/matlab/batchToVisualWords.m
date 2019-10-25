@@ -24,8 +24,8 @@ fprintf('Starting a pool of workers with %d cores\n', numCores);
 parpool('local', numCores);
 
 %load the files and texton dictionary
-load('traintest.mat','all_imagenames','mapping');
-load('dictionary.mat','filterBank','dictionary');
+load('../data/traintest.mat','all_imagenames','mapping');
+load('../result/dictionaryHarris.mat','filterBank','dictionary');
 
 source = '../data/';
 target = '../data/'; 
@@ -53,7 +53,10 @@ wordRepresentation = cell(l,1);
 parfor i=1:l
     fprintf('Converting to visual words %s\n', all_imagenames{i});
     image = imread([source, all_imagenames{i}]);
-    wordRepresentation{i} = getVisualWords(image, filterBank, dictionary');
+    if length(size(image)) == 2
+        image = image(:,:,[1 1 1])
+    end
+    wordRepresentation{i} = getVisualWords(image, filterBank, dictionary);
 end
 
 %dump the files

@@ -9,7 +9,7 @@ function [dictionary] = getDictionary(imgPaths, alpha, K, method)
         imgname = strcat(datadir, imgPaths{1});
         img = imread(imgname);
         filterResponses = reshape(extractFilterResponses(img, filterBank), ...
-                                    [], 2*length(filterBank));
+                                    [], 3*length(filterBank));
         
         img_gray = double(rgb2gray(img)) / 255;
         if strcmp(method, 'random')
@@ -20,5 +20,5 @@ function [dictionary] = getDictionary(imgPaths, alpha, K, method)
         points = sub2ind(size(img), points(:,1), points(:,2));
         pixelResponses = [pixelResponses; filterResponses(points, :)];                    
     end
-    [~, dictionary] = kmeans(pixelResponses, K, 'EmptyAction', 'drop')
+    [~, dictionary] = kmeans(pixelResponses, K, 'EmptyAction', 'drop');
 end
