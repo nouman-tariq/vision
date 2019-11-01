@@ -23,12 +23,12 @@ for n = 1:N
     filterResponses(:, :, 3*(n-1)+3) = imfilter(b, h);
 end
 
-% %% Show images and filtered images
+%% Show images and filtered images
 % figure; imshow([L a b]); hold on;
 % filterIdx = 2; % 1..4
 % scaleIdx = 3; % 1..5
 % showIdx = 5*(filterIdx-1) + scaleIdx;
 % figure; imshow([filterResponses(:, :, 3*(showIdx-1)+1)...
 %                 filterResponses(:, :, 3*(showIdx-1)+2)...
-%                 filterResponses(:, :, 3*(showIdx-1)+3)]); hold on;
+%                 filterResponses(:, :, 3*(showIdx-1)+3)]);
 end

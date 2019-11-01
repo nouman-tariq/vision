@@ -7,7 +7,7 @@ datadir = '../data/';
 load('dictionaryRandom.mat', 'dictionary', 'filterBank');
 trainFeatures = [];
 for i = 1:length(train_imagenames)
-    matname = strcat(datadir, train_imagenames{1});
+    matname = strcat(datadir, train_imagenames{i});
     matname = strrep(matname,'.jpg','.mat');
     load(matname, 'wordMap');
     trainFeatures = [trainFeatures; getImageFeatures(wordMap, size(dictionary, 1))];
@@ -18,7 +18,7 @@ save('visionRandom.mat', 'dictionary', 'filterBank', 'trainFeatures', 'trainLabe
 load('dictionaryHarris.mat', 'dictionary', 'filterBank');
 trainFeatures = [];
 for i = 1:length(train_imagenames)
-    matname = strcat(datadir, train_imagenames{1});
+    matname = strcat(datadir, train_imagenames{i});
     matname = strrep(matname,'.jpg','.mat');
     load(matname, 'wordMap');
     trainFeatures = [trainFeatures; getImageFeatures(wordMap, size(dictionary, 1))];
