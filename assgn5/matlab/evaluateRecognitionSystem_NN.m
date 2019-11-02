@@ -22,8 +22,6 @@ predictions_e = zeros(size(dataset.test_labels));
 predictions_c = zeros(size(dataset.test_labels));
 
 [K, ~] = size(vision_method.dictionary);
-[~, T] = size(vision_method.trainLabels);
-hs_trained = reshape(vision_method.trainFeatures, [K T]);
 
 for i = 1:length(dataset.test_imagenames)
     I = imread(strcat('../data/', dataset.test_imagenames{i}));
@@ -31,14 +29,14 @@ for i = 1:length(dataset.test_imagenames)
     h = getImageFeatures(wordmap, K);
     
     % Euclidean
-    dists = getImageDistance(h, hs_trained, 'euclidean');
+    dists = getImageDistance(h, vision_method.trainFeatures, 'euclidean');
     [~, nn_idx] = min(dists);
     predictions_e(i) = vision_method.trainLabels(nn_idx);
     true_i = dataset.test_labels(i);
     C_e(true_i, predictions_e(i)) = C_e(true_i, predictions_e(i)) + 1;
     
     % Chi2
-    dists = getImageDistance(h, hs_trained, 'chi2');
+    dists = getImageDistance(h, vision_method.trainFeatures, 'chi2');
     [~, nn_idx] = min(dists);
     predictions_c(i) = vision_method.trainLabels(nn_idx);
     true_i = dataset.test_labels(i);

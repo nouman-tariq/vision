@@ -29,8 +29,6 @@ C_k = zeros(length(ks), num_classes, num_classes);  % (length(ks), C , C)
 predictions_k = zeros([length(ks) size(dataset.test_labels, 2)]);  % (length(ks), M)
 
 [K, ~] = size(vision_method.dictionary);
-[~, T] = size(vision_method.trainLabels);
-hs_trained = reshape(vision_method.trainFeatures, [K T]);
 
 for i = 1:length(dataset.test_imagenames)
     I = imread(strcat('../data/', dataset.test_imagenames{i}));
@@ -39,7 +37,7 @@ for i = 1:length(dataset.test_imagenames)
 
     for k = ks
         % Chi2
-        dists = getImageDistance(h, hs_trained, 'chi2');
+        dists = getImageDistance(h, vision_method.trainFeatures, 'chi2');
         [~, ascendingIdx] = sort(dists);
         predictions_k(k, i) = mode(vision_method.trainLabels(ascendingIdx(1:k)));
         true_i = dataset.test_labels(i);
