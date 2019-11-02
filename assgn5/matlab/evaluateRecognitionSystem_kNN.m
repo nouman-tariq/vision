@@ -11,7 +11,7 @@ xlabel('k')
 ylabel('accuracy')
 
 function [C, acc, acc_k, k_best] = eval_kNN(ks, dataset, vision_method)
-% Runs a recognition system evaulation using Nearest Neighbors
+% Runs a recognition system evaulation using k-Nearest Neighbors
 % 
 % ks: array of number of neighbors 'k' to try
 % dataset: dataset loaded from '../data/traintest.mat'
