@@ -1,11 +1,11 @@
 %% Training data
 load('../data/traintest.mat', 'train_imagenames', 'train_labels');
 trainLabels = train_labels;
-datadir = '../data/';
 
 %% Random
 load('dictionaryRandom.mat', 'dictionary', 'filterBank');
 trainFeatures = [];
+datadir = '../data/random/';
 for i = 1:length(train_imagenames)
     matname = strcat(datadir, train_imagenames{i});
     matname = strrep(matname,'.jpg','.mat');
@@ -17,6 +17,7 @@ save('visionRandom.mat', 'dictionary', 'filterBank', 'trainFeatures', 'trainLabe
 %% Harris
 load('dictionaryHarris.mat', 'dictionary', 'filterBank');
 trainFeatures = [];
+datadir = '../data/harris/';
 for i = 1:length(train_imagenames)
     matname = strcat(datadir, train_imagenames{i});
     matname = strrep(matname,'.jpg','.mat');

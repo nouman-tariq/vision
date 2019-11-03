@@ -30,7 +30,7 @@ predictions_k = zeros([length(ks) size(dataset.test_labels, 2)]);  % (length(ks)
 
 [K, ~] = size(vision_method.dictionary);
 [~, T] = size(vision_method.trainLabels);
-hs_trained = reshape(vision_method.trainFeatures, [K T]);
+hs_trained = vision_method.trainFeatures';
 
 for i = 1:length(dataset.test_imagenames)
     I = imread(strcat('../data/', dataset.test_imagenames{i}));

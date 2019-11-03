@@ -1,15 +1,15 @@
 %% Load image names
-load('../data/traintest.mat', 'all_imagenames');
+load('../data/traintest.mat', 'train_imagenames');
 
 %% Parameters
-alpha = 50;
+alpha = 500;
 K = 100;
 filterBank = createFilterBank();
 
 %% Using 'random' method
-dictionary = getDictionary(all_imagenames, alpha, K, 'random');
-save('../result/dictionaryRandom.mat', 'filterBank', 'dictionary');
+dictionary = getDictionary(train_imagenames, alpha, K, 'random');
+save('dictionaryRandom.mat', 'filterBank', 'dictionary');
 
-%% Using 'random' method
-dictionary = getDictionary(all_imagenames, alpha, K, 'harris');
-save('../result/dictionaryHarris.mat', 'filterBank', 'dictionary');
+%% Using 'harris' method
+dictionary = getDictionary(train_imagenames, alpha, K, 'harris');
+save('dictionaryHarris.mat', 'filterBank', 'dictionary');
