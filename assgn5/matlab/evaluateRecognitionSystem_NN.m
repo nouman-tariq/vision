@@ -2,10 +2,10 @@ dataset = load('../data/traintest.mat');
 vision_harris = load('visionHarris.mat');
 vision_random = load('visionRandom.mat');
 
-[Ch_e, Ch_c, acch_e, acch_c] = eval_NN(dataset, vision_harris)
-[Cr_e, Cr_c, accr_e, accr_c] = eval_NN(dataset, vision_random)
+[Ch_e, Ch_c, acch_e, acch_c] = eval_NN(dataset, vision_harris, '../data/harris/')
+[Cr_e, Cr_c, accr_e, accr_c] = eval_NN(dataset, vision_random, '../data/random/')
 
-function [C_e, C_c, acc_e, acc_c] = eval_NN(dataset, vision_method)
+function [C_e, C_c, acc_e, acc_c] = eval_NN(dataset, vision_method, prepath)
 % Runs a recognition system evaulation using Nearest Neighbors
 % 
 % dataset: dataset loaded from '../data/traintest.mat'
@@ -15,6 +15,9 @@ function [C_e, C_c, acc_e, acc_c] = eval_NN(dataset, vision_method)
 %   - C_e, acc_e: confusion matrix and accuracy for using euclidean metric
 %   - C_c, acc_c: confusion matrix and accuracy for using chi2 metric
 
+%dataset.test_labels = dataset.train_labels;
+%dataset.test_imagenames = dataset.train_imagenames;
+
 num_classes = size(dataset.mapping, 2);
 C_e = zeros(num_classes, num_classes);
 C_c = zeros(num_classes, num_classes);
@@ -23,10 +26,12 @@ predictions_c = zeros(size(dataset.test_labels));
 
 [K, ~] = size(vision_method.dictionary);
 
-for i = 1:length(dataset.test_imagenames)
-    I = imread(strcat('../data/', dataset.test_imagenames{i}));
-    wordmap = getVisualWords(I, vision_method.filterBank, vision_method.dictionary);
-    h = getImageFeatures(wordmap, K);
+for i = 1:length(dataset.test_imagenames)    
+    matname = strcat(prepath, dataset.test_imagenames{i});
+    matname = strrep(matname,'.jpg','.mat');
+    load(matname, 'wordMap');
+    
+    h = getImageFeatures(wordMap, K);
     
     % Euclidean
     dists = getImageDistance(h, vision_method.trainFeatures', 'euclidean');
@@ -42,7 +47,7 @@ for i = 1:length(dataset.test_imagenames)
     true_i = dataset.test_labels(i);
     C_c(true_i, predictions_c(i)) = C_c(true_i, predictions_c(i)) + 1;
 
-    fprintf('Finished %d of %d\n', i, length(dataset.test_imagenames));
+    %fprintf('Finished %d of %d\n', i, length(dataset.test_imagenames));
 end
 acc_e = mean(predictions_e == dataset.test_labels);
 acc_c = mean(predictions_c == dataset.test_labels);

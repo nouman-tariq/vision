@@ -1,8 +1,8 @@
 dataset = load('../data/traintest.mat');
-vision_harris = load('visionHarris.mat');
+vision_random = load('visionRandom.mat');
 ks = 1:40;
 
-[C, acc, acc_k, k_best] = eval_kNN(ks, dataset, vision_harris)
+[C, acc, acc_k, k_best] = eval_kNN(ks, dataset, vision_random, '../data/random/')
 
 figure
 plot(ks, acc_k)
@@ -10,7 +10,7 @@ title('kNN accuracy across k')
 xlabel('k')
 ylabel('accuracy')
 
-function [C, acc, acc_k, k_best] = eval_kNN(ks, dataset, vision_method)
+function [C, acc, acc_k, k_best] = eval_kNN(ks, dataset, vision_method, prepath)
 % Runs a recognition system evaulation using k-Nearest Neighbors
 % 
 % ks: array of number of neighbors 'k' to try
@@ -29,17 +29,17 @@ C_k = zeros(length(ks), num_classes, num_classes);  % (length(ks), C , C)
 predictions_k = zeros([length(ks) size(dataset.test_labels, 2)]);  % (length(ks), M)
 
 [K, ~] = size(vision_method.dictionary);
-[~, T] = size(vision_method.trainLabels);
-hs_trained = vision_method.trainFeatures';
 
 for i = 1:length(dataset.test_imagenames)
-    I = imread(strcat('../data/', dataset.test_imagenames{i}));
-    wordmap = getVisualWords(I, vision_method.filterBank, vision_method.dictionary);
-    h = getImageFeatures(wordmap, K);
+    matname = strcat(prepath, dataset.test_imagenames{i});
+    matname = strrep(matname,'.jpg','.mat');
+    load(matname, 'wordMap');
+    
+    h = getImageFeatures(wordMap, K);
 
     for k = ks
         % Chi2
-        dists = getImageDistance(h, vision_method.trainFeatures, 'chi2');
+        dists = getImageDistance(h, vision_method.trainFeatures', 'chi2');
         [~, ascendingIdx] = sort(dists);
         predictions_k(k, i) = mode(vision_method.trainLabels(ascendingIdx(1:k)));
         true_i = dataset.test_labels(i);
