@@ -39,7 +39,7 @@ for i = 1:length(dataset.test_imagenames)
 
     for k = ks
         % Chi2
-        dists = getImageDistance(h, hs_trained, 'chi2');
+        dists = getImageDistance(h, vision_method.trainFeatures, 'chi2');
         [~, ascendingIdx] = sort(dists);
         predictions_k(k, i) = mode(vision_method.trainLabels(ascendingIdx(1:k)));
         true_i = dataset.test_labels(i);
