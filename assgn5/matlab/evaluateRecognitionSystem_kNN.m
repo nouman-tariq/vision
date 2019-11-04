@@ -47,7 +47,7 @@ for i = 1:length(dataset.test_imagenames)
 
         % fprintf('Finished %d of %d, k = %d\n', i, length(dataset.test_imagenames), k);
     end
-    fprintf('Finished %d of %d\n', i, length(dataset.test_imagenames));
+    %fprintf('Finished %d of %d\n', i, length(dataset.test_imagenames));
 end
 acc_k = mean(predictions_k == dataset.test_labels, 2);
 [~, k_best] = max(acc_k);

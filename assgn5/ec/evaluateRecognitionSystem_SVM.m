@@ -2,9 +2,11 @@ addpath('libsvm/matlab');
 addpath('../matlab');
 
 dataset = load('../data/traintest.mat');
-vision_random = load('../matlab/visionRandom.mat');
+load('../matlab/visionRandom.mat', 'dictionary', 'filterBank', 'trainFeatures', 'trainLabels');
+save('visionSVM.mat', 'dictionary', 'filterBank', 'trainFeatures', 'trainLabels');
+vision_svm = load('visionSVM.mat');
 
-[acc_l, acc_r] = eval_SVM(dataset, vision_random, '../data/random/')
+[acc_l, acc_r] = eval_SVM(dataset, vision_svm, '../data/random/')
 
 function [acc_l, acc_r] = eval_SVM(dataset, vision_method, prepath)
 % Runs a recognition system evaulation using Support Vector Machine
