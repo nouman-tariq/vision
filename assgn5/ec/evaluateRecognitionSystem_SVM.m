@@ -6,9 +6,10 @@ load('../matlab/visionRandom.mat', 'dictionary', 'filterBank', 'trainFeatures', 
 save('visionSVM.mat', 'dictionary', 'filterBank', 'trainFeatures', 'trainLabels');
 vision_svm = load('visionSVM.mat');
 
-[acc_l, acc_r] = eval_SVM(dataset, vision_svm, '../data/random/')
+[acc_linear] = eval_SVM(dataset, vision_svm, '../data/random/', '-q -s 0 -t 0 -c 10000 -g 0.1')
+[acc_rbf] = eval_SVM(dataset, vision_svm, '../data/random/', '-q -s 0 -t 2 -c 10000 -g 0.1')
 
-function [acc_l, acc_r] = eval_SVM(dataset, vision_method, prepath)
+function [acc] = eval_SVM(dataset, vision_method, prepath, options)
 % Runs a recognition system evaulation using Support Vector Machine
 % 
 % dataset: dataset loaded from '../data/traintest.mat'
@@ -23,17 +24,15 @@ T2 = length(dataset.test_imagenames);
 
 hs = zeros([T2 K]);
 
-svm_l = svmtrain(dataset.train_labels', vision_method.trainFeatures, '-s 1 -t 0');
-svm_r = svmtrain(dataset.train_labels', vision_method.trainFeatures, '-s 1 -t 2');
+svm = svmtrain(dataset.train_labels', vision_method.trainFeatures, options);
 
 for i = 1:T2
     matname = strcat(prepath, dataset.test_imagenames{i});
     matname = strrep(matname,'.jpg','.mat');
     load(matname, 'wordMap');
     hs(i, :) = getImageFeatures(wordMap, K);
-    fprintf('finished %d of %d\n', i, T2);
+    % fprintf('finished %d of %d\n', i, T2);
 end
 
-[~, acc_l, ~] = svmpredict(dataset.test_labels', hs, svm_l);
-[~, acc_r, ~] = svmpredict(dataset.test_labels', hs, svm_r);
+[~, acc, ~] = svmpredict(dataset.test_labels', hs, svm);
 end
