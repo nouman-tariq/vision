@@ -13,11 +13,12 @@ function [acc] = eval_SVM(dataset, vision_method, prepath, options)
 % Runs a recognition system evaulation using Support Vector Machine
 % 
 % dataset: dataset loaded from '../data/traintest.mat'
-% vision_method: 'visionHarris.mat' or 'visionRandom.mat'
+% vision_method: 'visionHarris.mat' or 'visionRandom.mat' or 'visionSVM.mat'
+% prepath: parent directory path of test images
+% options: string for setting kernel and other hyperparameters in svmtrain
 %
 % Returns:
-%   - acc_l: accuracy using linear kernel
-%   - acc_r: accuracy using rbf (gaussian) kernel
+%   - acc: accuracy
 
 T2 = length(dataset.test_imagenames);
 [K, ~] = size(vision_method.dictionary);
