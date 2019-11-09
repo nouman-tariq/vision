@@ -9,6 +9,6 @@ output.height = n;
 output.width = 1;
 output.channel = 1;
 output.batch_size = k;
-output.data = param.w * input.data + param.b;  % (n,d) * (d,k) + (n,1) = (n,k)
+output.data = param.w' * input.data + param.b';  % (d,n)' * (d,k) + (1,n)' = (n,k)
 
 end

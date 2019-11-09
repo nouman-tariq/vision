@@ -37,17 +37,20 @@ for b = 1:batch_size
     input_n.data = input.data(:, b);
     col = im2col_conv(input_n, layer, h_out, w_out);
     col = reshape(col, k * k * c, h_out * w_out);
-    conv_col = zeros([num, h_out * w_out]);
+    conv_col = zeros([h_out * w_out, num]);
     for pos = 1:(h_out * w_out) % for each (x,y)-coordinate
         % each coordinate has (num,1) many responses
         for f = 1:num           % for each filter
             % param.w: (k * k * c, num)
             % param.b: (1, num)
-            conv_col(f, pos) = sum(param.w(:,f) .* col(:,pos)) + param.b(:, f);  % (k*k*c,1) -> scalar
+            conv_col(pos, f) = sum(param.w(:,f) .* col(:,pos)) + param.b(:, f);  % (k*k*c,1) -> scalar
         end
     end
-    im = col2im_conv(conv_col(:), input, layer, h_out, w_out);
-    output.data(:, b) = im(:); 
+    %coord_idx = 1:(h_out * w_out);
+    %for f = 1:num
+    %    conv_col(coord_idx, f) = sum(param.w(:, f) .* col(:, coord_idx)) + param.b(:, f);
+    %end
+    output.data(:, b) = reshape(conv_col, [h_out * w_out * num, 1]); 
 end
 end
 

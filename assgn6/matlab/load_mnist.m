@@ -1,6 +1,6 @@
 function [xtrain, ytrain, xvalidate, yvalidate, xtest, ytest] = load_mnist(fullset)
 
-	load('../data/mnist_all.mat');
+	load('mnist_all.mat');
     
 	xtrain = [train0; train1; train2;train3;train4;train5;train6;train7;train8;train9];
 	ytrain = [ones(size(train0,1),1);
