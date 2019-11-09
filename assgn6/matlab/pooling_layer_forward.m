@@ -19,6 +19,17 @@ function [output] = pooling_layer_forward(input, layer)
 
     % Replace the following line with your implementation.
     output.data = zeros([h_out, w_out, c, batch_size]);
+    for b = 1:batch_size
+        input_b = reshape(input.data(:, b), [h_in, w_in, c]);
+        input_b = padarray(input_b, [pad pad]);
+        for h = 1:h_out
+            for w = 1:w_out
+                window = input_b((h-1)*stride+1:(h-1)*stride+k, (w-1)*stride+1:(w-1)*stride+k, :);
+                output.data(h, w, :, b) = max(max(window));
+            end
+        end
+    end
+    output.data = reshape(output.data, [h_out * w_out * c, batch_size]);
 
 end
 
