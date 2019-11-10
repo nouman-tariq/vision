@@ -10,6 +10,16 @@ load lenet.mat
 
 %% Testing the network
 % Modify the code to get the confusion matrix
+probs = [];
 for i=1:100:size(xtest, 2)
-    [output, P] = convnet_forward(params, layers, xtest(:, i:i+99));
+    [~, P] = convnet_forward(params, layers, xtest(:, i:i+99));
+    probs = [probs P];
 end
+
+[~, idx] = max(probs);
+n = length(ytest);
+C = zeros(10, 10);
+for i=1:n
+    C(idx(i), ytest(i)) = C(idx(i), ytest(i))+1;
+end
+disp(C);
