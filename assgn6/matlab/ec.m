@@ -1,10 +1,10 @@
 % Predict handwriting from images
-%[p1, ~] = predict('../images/image1.JPG', 64);
-%figure; imshow(p1);
-%[p2, ~] = predict('../images/image2.JPG', 64);
-%figure; imshow(p2);
-%[p3, ~] = predict('../images/image3.png', 32);
-%figure; imshow(p3);
+[p1, ~] = predict('../images/image1.JPG', 64);
+figure; imshow(p1);
+[p2, ~] = predict('../images/image2.JPG', 64);
+figure; imshow(p2);
+[p3, ~] = predict('../images/image3.png', 32);
+figure; imshow(p3);
 [p4, ~] = predict('../images/image4.jpg', 16);
 figure; imshow(p4);
 
