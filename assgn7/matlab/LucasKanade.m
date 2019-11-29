@@ -19,7 +19,7 @@ template = interp2(It, Xq, Yq);
 [It1x, It1y] = gradient(It1);
 n_iter = 0;
 
-while (norm(deltap) > 0.01) && (n_iter < 50)
+while (norm(deltap) > 0.01) && (n_iter < 1000)
 
     % 1. Warp image
     [Xq, Yq] = meshgrid((x:x+w-1)+u, (y:y+h-1)+v);
@@ -54,8 +54,7 @@ while (norm(deltap) > 0.01) && (n_iter < 50)
     % 7. Update p
     u = u + deltap(1); v = v + deltap(2);
     
-    n_iter = n_iter + 1;
-   
+    n_iter = n_iter + 1;    
 end
 if isnan(u) || isnan(v)
     u = 0; v = 0;
