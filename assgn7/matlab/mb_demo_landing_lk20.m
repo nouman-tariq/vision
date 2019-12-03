@@ -14,35 +14,44 @@ prev_frame = imread(strcat(prepath, frames(1).name));
 % ginput(2)
 [Xq, Yq] = meshgrid((x:x+w-1), (y:y+h-1));
 template = interp2(im2double(prev_frame), double(Xq), double(Yq));
+h = size(template, 1);
+w = size(template, 2);
+tmplt_pts = [1 1; 1 h; w h; w 1]';
 
-context = initAffineMBTracker(prev_frame, tracker);
+% context = initAffineMBTracker(prev_frame, tracker);
 
 vid = VideoWriter('mb_landing_.avi');
 open(vid);
 
 %% Start tracking
 % initially, W(x; 0) so p = 0 for every estimation of p per frame
-new_tracker = tracker;
-Win = eye(3);
+Win = [ 1 0 x; 0 1 y; 0 0 1 ];
+p_init = [0 0 x; 0 0 y];
 for i = 2:length(frames)
 %     fprintf('frame %d\n', i);
     new_frame = imread(strcat(prepath, frames(i).name));
     
     
-    [fit, Wout] = affine_ic(im2double(new_frame)*255, template*255, [0 0 443; 0 0 90], 0, 0);
+    [fit, warp_p] = affine_ic(im2double(new_frame)*255, template*255, p_init, 0, 0);
 %     Wout = affineMBTracker(new_frame, template, tracker, Win, context);
-
-    xy = Wout * [tracker(1), tracker(2), 1]';
-    new_tracker = [ xy(1), xy(2), w, h ];
     
-%     xy = Wout * [new_tracker(1) + w/2, new_tracker(2) + h/2, 1]';
-%     new_tracker = [ xy(1)/xy(3) - w/2, xy(2)/xy(3) - h/2, w, h ];
+    M = [warp_p; 0 0 1];
+    M(1,1) = M(1,1) + 1;
+    M(2,2) = M(2,2) + 1;
+    warp_pts =  M * [tmplt_pts; ones(1, size(tmplt_pts,2))];
+    
+    p_init = warp_p;
     
     clf;
     hold on;
+    axis tight;
     imshow(new_frame, 'border', 'tight');   
-    rectangle('Position', new_tracker, 'EdgeColor', [1 1 0]);
+%     rectangle('Position', new_tracker, 'EdgeColor', [1 1 0]);
+    hold on;
+    plot([warp_pts(1,:) warp_pts(1,1)], [warp_pts(2,:) warp_pts(2,1)], 'r-');
+    annotation('textbox', [0.5, 0.5, 0, 0], 'string', sprintf('frame #%d', i), 'Color', 'Red');
     drawnow;
+    
     
 %     tracker = new_tracker;
 %     Win = Wout;
