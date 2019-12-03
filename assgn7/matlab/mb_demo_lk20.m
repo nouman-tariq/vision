@@ -1,4 +1,4 @@
-tracker = [164 123 297-164 235-123];  %[178 174 274-178 222-174]; %[126 108 336-126 276-108];
+tracker = [124 143 337-124 275-143];
 x = tracker(1); y = tracker(2); w = tracker(3); h = tracker(4);
 
 %% Initialize the tracker
@@ -26,7 +26,7 @@ open(vid);
 % initially, W(x; 0) so p = 0 for every estimation of p per frame
 % new_tracker = tracker;
 Win = [ 1 0 x; 0 1 y; 0 0 1 ];
-p_init = [0 0 164; 0 0 123];
+p_init = [0 0 x; 0 0 y];
 for i = 2:length(frames)
     new_frame = imread(strcat(prepath, frames(i).name));
     
@@ -42,6 +42,7 @@ for i = 2:length(frames)
 
     % xy = Wout * [tracker(1), tracker(2), 1]';
     
+    p_init = warp_p;
     % p_init = Wout;
     
     % new_tracker = [ xy(1), xy(2), w, h ];

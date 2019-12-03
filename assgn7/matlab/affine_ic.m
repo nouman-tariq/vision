@@ -44,6 +44,7 @@ for f=1:n_iters
 	IWxp = warp_a(img, warp_p, tmplt_pts);
 
 	% 2) Compute error image - NB reversed
+    IWxp = IWxp * mean(tmplt(:)) / mean(IWxp(:));
 	error_img = IWxp - tmplt;
 	
 	% -- Save current fit parameters --
