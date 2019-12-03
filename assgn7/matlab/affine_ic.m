@@ -1,4 +1,4 @@
-function fit = affine_ic(img, tmplt, p_init, n_iters, verbose, step_size)
+function [fit, warp_p] = affine_ic(img, tmplt, p_init, n_iters, verbose, step_size)
 % AFFINE_IC - Affine image alignment using inverse-compositional algorithm
 %   FIT = AFFINE_IC(IMG, TMPLT, P_INIT, N_ITERS, VERBOSE)
 %   Align the template image TMPLT to an example image IMG using an
@@ -37,10 +37,9 @@ H = hessian(VT_dW_dp, N_p, w);
 H_inv = inv(H);
 
 % Baker-Matthews, Inverse Compositional Algorithm -------------------------
+n_iters = 100;
 
-% for f=1:n_iters
-f = 1;
-while true
+for f=1:n_iters
 	% 1) Compute warped image with current parameters
 	IWxp = warp_a(img, warp_p, tmplt_pts);
 
@@ -53,7 +52,7 @@ while true
 	
 	% -- Show fitting? --
 	if verbose
-		disp(['Inverse-Compositional [',num2str(f-1),']: RMS = ',num2str(fit(f).rms_error)]);
+% 		disp(['Inverse-Compositional [',num2str(f-1),']: RMS = ',num2str(fit(f).rms_error)]);
 	end
 	
 	% -- Really iteration 1 is the zeroth, ignore final computation --
@@ -69,11 +68,9 @@ while true
 	warp_p = update_step(warp_p, delta_p);
     
     if norm(delta_p) <= 0.01 
-        verb_plot_a(verb_info, warp_p, tmplt_pts, error_img);
+%         verb_plot_a(verb_info, warp_p, tmplt_pts, error_img);
         break; 
     end
-    
-    f = f+1;
 end
 
 

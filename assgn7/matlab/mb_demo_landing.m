@@ -38,7 +38,7 @@ for i = 2:length(frames)
     rectangle('Position', new_tracker, 'EdgeColor', [1 1 0]);
     drawnow;
     
-    tracker = new_tracker;
+%     tracker = new_tracker;
 %     Win = Wout;
     
     frame = getframe(gcf);

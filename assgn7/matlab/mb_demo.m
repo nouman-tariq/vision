@@ -29,7 +29,7 @@ for i = 2:length(frames)
     new_frame = imread(strcat(prepath, frames(i).name));
     Wout = affineMBTracker(new_frame, template, tracker, Win, context);
     
-    xy = Wout * [new_tracker(1) + w/2, new_tracker(2) + h/2, 1]';
+    xy = Wout * [tracker(1) + w/2, tracker(2) + h/2, 1]';
     new_tracker = [ xy(1)/xy(3) - w/2, xy(2)/xy(3) - h/2, w, h ];
     
     clf;
@@ -38,7 +38,7 @@ for i = 2:length(frames)
     rectangle('Position', new_tracker, 'EdgeColor', [1 1 0]);
     drawnow;
     
-    tracker = new_tracker;
+%     tracker = new_tracker;
 %     Win = Wout;
     
     frame = getframe(gcf);
