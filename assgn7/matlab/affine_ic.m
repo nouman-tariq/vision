@@ -52,8 +52,10 @@ for f=1:n_iters
 	
 	% -- Show fitting? --
 	if verbose
-% 		disp(['Inverse-Compositional [',num2str(f-1),']: RMS = ',num2str(fit(f).rms_error)]);
-	end
+ 		disp(['Inverse-Compositional [',num2str(f-1),']: RMS = ',num2str(fit(f).rms_error)]);
+        verb_plot_a(verb_info, warp_p, tmplt_pts, error_img);
+    end
+    
 	
 	% -- Really iteration 1 is the zeroth, ignore final computation --
 	% if (f == n_iters) break; end
@@ -68,7 +70,7 @@ for f=1:n_iters
 	warp_p = update_step(warp_p, delta_p);
     
     if norm(delta_p) <= 0.01 
-%         verb_plot_a(verb_info, warp_p, tmplt_pts, error_img);
+         
         break; 
     end
 end
