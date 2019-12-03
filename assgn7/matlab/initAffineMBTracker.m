@@ -1,9 +1,6 @@
 function [affineMBContext] = initAffineMBTracker(img, rect)
 % rect: tracking target
-x = rect(1);
-y = rect(2);
-w = rect(3);
-h = rect(4);
+x = rect(1); y = rect(2); w = rect(3); h = rect(4);
 m = w * h;
 img = im2double(img);
 
