@@ -31,6 +31,10 @@ for i = 2:length(frames)
     Wout = affineMBTracker(new_frame, template, tracker, Win, context);
     
     warp_pts =  Wout * [tmp_corners; ones(1, size(tmp_corners, 2))];
+    warp_pts_ = warp_pts(1:2, :);
+    min_xy = min(warp_pts_, [], 2);
+    max_xy = max(warp_pts_, [], 2);
+    new_tracker = [min_xy(1), min_xy(2), max_xy(1) - min_xy(1), max_xy(2) - min_xy(2)];
     
     Win = Wout;
     
@@ -38,8 +42,9 @@ for i = 2:length(frames)
     hold on;
     axis tight;
     imshow(new_frame, 'border', 'tight');   
-    hold on;
-    plot([warp_pts(1,:) warp_pts(1,1)], [warp_pts(2,:) warp_pts(2,1)], 'r-');
+    rectangle('Position', new_tracker, 'EdgeColor', [1 1 0], 'LineWidth', 2);
+    text(new_tracker(1), new_tracker(2)-15, 'MB', 'Color', [1 1 0], 'FontSize', 14, 'FontWeight', 'bold');
+    % plot([warp_pts(1,:) warp_pts(1,1)], [warp_pts(2,:) warp_pts(2,1)], 'r-');
     % Frame #
     % annotation('textbox', [0.5, 0.5, 0, 0], 'string', sprintf('frame #%d', i), 'Color', 'Red');
     drawnow;
