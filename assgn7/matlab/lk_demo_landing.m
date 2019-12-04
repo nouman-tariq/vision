@@ -1,3 +1,5 @@
+addpath('../ec/');
+
 tracker = [443 90 560-443 131-90];
 
 %% Initialize the tracker
