@@ -1,8 +1,8 @@
-tracker = [164 134 298-164 262-134];    %[178 174 274-178 222-174]; %[126 108 336-126 276-108];
+tracker = [124 143 337-124 275-143];
 x = tracker(1); y = tracker(2); w = tracker(3); h = tracker(4);
 
 %% Initialize the tracker
-figure;
+% figure;
 
 % TODO run the Matthew-Baker alignment in both landing and car sequences
 prepath = '../data/car/';
@@ -10,11 +10,11 @@ frames = dir(strcat(prepath, '*.jpg'));
 
 prev_frame = imread(strcat(prepath, frames(1).name));
 
-% Selecting tracker
-%imshow(prev_frame)
-%ginput(2)
+% imshow(prev_frame)
+% ginput(2)
 [Xq, Yq] = meshgrid((x:x+w-1), (y:y+h-1));
 template = interp2(im2double(prev_frame), double(Xq), double(Yq));
+tmp_corners = [1 1; 1 h; w h; w 1]';
 
 context = initAffineMBTracker(prev_frame, tracker);
 
@@ -23,24 +23,25 @@ open(vid);
 
 %% Start tracking
 % initially, W(x; 0) so p = 0 for every estimation of p per frame
-new_tracker = tracker;
-Win = eye(3);
+Win = [ 1 0 x; 0 1 y; 0 0 1 ];
+p_init = [0 0 x; 0 0 y];
 for i = 2:length(frames)
     new_frame = imread(strcat(prepath, frames(i).name));
-    Wout = affineMBTracker(new_frame, template, tracker, Win, context);
     
-    xy = Wout * [tracker(1) + w/2, tracker(2) + h/2, 1]';
-    new_tracker = [ xy(1)/xy(3) - w/2, xy(2)/xy(3) - h/2, w, h ];
+    Wout = affineMBTracker(new_frame, template, tracker, Win, context);
+
+    warp_pts =  Wout * [tmp_corners; ones(1, size(tmp_corners, 2))];
+    
+    Win = Wout;
     
     clf;
     hold on;
+    axis tight;
     imshow(new_frame, 'border', 'tight');   
-    rectangle('Position', new_tracker, 'EdgeColor', [1 1 0]);
+    hold on;
+    plot([warp_pts(1,:) warp_pts(1,1)], [warp_pts(2,:) warp_pts(2,1)], 'r-');
     drawnow;
-    
-%     tracker = new_tracker;
-%     Win = Wout;
-    
+
     frame = getframe(gcf);
     writeVideo(vid, frame.cdata);
 end
