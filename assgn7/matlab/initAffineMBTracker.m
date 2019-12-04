@@ -4,7 +4,7 @@ x = rect(1); y = rect(2); w = rect(3); h = rect(4);
 
 [Xq, Yq] = meshgrid((x:x+w-1), (y:y+h-1));
 tmp = interp2(im2double(img), double(Xq), double(Yq));
-tmp = tmp * 225;
+% tmp = tmp * 225;
 
 %% 3. Evaluate gradient of template
 [Tx, Ty] = gradient(tmp);

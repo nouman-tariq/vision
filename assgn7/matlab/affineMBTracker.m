@@ -3,9 +3,9 @@ function [Wout] = affineMBTracker(img, tmp, rect, Win, context)
 if ~isa(img, 'double')
 	img = double(img);
 end
-img = img * 255;
-
-tmp = tmp * 225;
+% img = img * 255;
+% 
+% tmp = tmp * 225;
 
 w = rect(3); h = rect(4);
 
