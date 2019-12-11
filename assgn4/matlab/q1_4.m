@@ -14,8 +14,8 @@ end
 N = (S\I')';
 N = reshape(N, h, w, 3);
 
-figure; axis tight; 
-quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse')
+figure; 
+quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis tight; 
 imwrite(getframe(gcf).cdata, '../results/q1_4_quiver.jpg');
 
 albedo = vecnorm(N, 2, 3);
@@ -27,5 +27,5 @@ s = [-0.58; -0.58; -0.58];
 imwrite(reshape(max(sum(reshape(N, [], 3) * s, 2), 0), h, w), '../results/q1_4_render2.jpg');
 
 z = integrate_frankot(N);
-figure; axis equal; 
-surf(z, repmat(-N(:,:,3), 1, 1, 3), 'LineStyle', 'none');
+figure; 
+surf(-z, zeros(h, w), 'LineStyle', 'none'); light; lighting gouraud;axis vis3d; 
