@@ -15,7 +15,7 @@ N = (S\I')';
 N = reshape(N, h, w, 3);
 
 figure; 
-quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis tight; 
+quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis square; 
 imwrite(getframe(gcf).cdata, '../results/q1_4_quiver.jpg');
 
 albedo = vecnorm(N, 2, 3);
