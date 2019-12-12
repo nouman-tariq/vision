@@ -13,18 +13,19 @@ end
 
 N = (S\I')';
 N = reshape(N, h, w, 3);
+albedo = vecnorm(N, 2, 3);
+N = N ./ albedo;
 
 figure; 
 quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis square; 
 imwrite(getframe(gcf).cdata, '../results/q1_4_quiver.jpg');
 
-albedo = vecnorm(N, 2, 3);
 imwrite(albedo, '../results/q1_4_albedo.jpg');
 
 s = [0.58; -0.58; -0.58];
-imwrite(reshape(max(sum(reshape(N, [], 3) * s, 2), 0), h, w), '../results/q1_4_render1.jpg');
+imwrite(reshape(max(sum(reshape(N .* albedo, [], 3) * s, 2), 0), h, w), '../results/q1_4_render1.jpg');
 s = [-0.58; -0.58; -0.58];
-imwrite(reshape(max(sum(reshape(N, [], 3) * s, 2), 0), h, w), '../results/q1_4_render2.jpg');
+imwrite(reshape(max(sum(reshape(N .* albedo, [], 3) * s, 2), 0), h, w), '../results/q1_4_render2.jpg');
 
 z = integrate_frankot(N);
 figure; 
