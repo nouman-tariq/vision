@@ -17,7 +17,7 @@ albedo = vecnorm(N, 2, 3);
 N = N ./ albedo;
 
 figure; 
-quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis square; 
+quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis(gca, 'square');
 imwrite(getframe(gcf).cdata, '../results/q1_4_quiver.jpg');
 
 imwrite(albedo, '../results/q1_4_albedo.jpg');
