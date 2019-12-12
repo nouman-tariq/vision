@@ -8,4 +8,4 @@ T = metameric(Lf, Lg);
 fprintf('Optimal temperature = %.4fK\n', T);
 figure;
 l = 0.01:10:4000;
-plot(l, blackbody(T, l)); xline(400); xline(700);
+plot(l, blackbody(T, l)); xline(400); xline(700); xlabel('Wavelength (nm)'); ylabel('Intensity');
