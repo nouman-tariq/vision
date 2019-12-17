@@ -17,8 +17,15 @@ albedo = vecnorm(N, 2, 3);
 N = N ./ albedo;
 
 figure; 
-quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis(gca, 'square');
-imwrite(getframe(gcf).cdata, '../results/q1_4_quiver.jpg');
+subplot(1,3,1);
+quiver(N(:,:,1), N(:,:,2)); set(gca, 'YDir','reverse'); axis(gca, 'square'); title('Quiver x-y');
+
+subplot(1,3,2);
+quiver(N(:,:,1), N(:,:,3)); set(gca, 'YDir','reverse'); axis(gca, 'square'); title('Quiver x-z');
+
+
+subplot(1,3,3);
+quiver(N(:,:,2), N(:,:,3)); set(gca, 'YDir','reverse'); axis(gca, 'square'); title('Quiver y-z');
 
 imwrite(albedo, '../results/q1_4_albedo.jpg');
 
