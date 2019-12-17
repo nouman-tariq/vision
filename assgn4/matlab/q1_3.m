@@ -8,6 +8,8 @@ imwrite(getframe(gcf).cdata, '../results/q1_3_quiver.jpg');
 rot_x = @(x) [1 0 0; 0 cosd(x) -sind(x); 0 sind(x) cosd(x)];
 rot_y = @(x) [cosd(x) 0 sind(x); 0 1 0; -sind(x) 0 cosd(x)];
 
+imwrite(N(:,:,3), '../results/q1_3_z.jpg');
+
 s = rot_x(-45)*[0;0;1];
 imwrite(reshape(max(sum(reshape(N, [], 3) * s, 2), 0), h, w), '../results/q1_3_45u.jpg');
 
